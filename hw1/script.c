@@ -10,16 +10,33 @@ int main() {
 	/* local variables */
 	SpiceChar leapSeconds_KernelFile [FILE_SIZE] = "naif0012.tls";	// file name
 	SpiceChar tdrssSPK_KernelFile [FILE_SIZE] = "TDRSS.bsp";		// file name
-	SpiceChar observer[WORD_SIZE];									// name of observer
-	SpiceChar target[WORD_SIZE];									// name of target, in our case will be TDRSS-10
+	SpiceChar observer[WORD_SIZE] = "EARTH";						// name of observer
+	SpiceChar target[WORD_SIZE] = "-141";							// TDRSS-10 (ID -141 via the names file)
+	SpiceChar time_UTC[WORD_SIZE] = "2023 JAN 01 12:00:00";			// Time we want position at
+	SpiceDouble lightTime;											// not strictly needed for us, but needed for the function
+	SpiceDouble time_ET;											// variable to store ephemeris time
+	SpiceDouble stateData[6];										// used to store state data
 
 	/* load kernels */
 	furnsh_c(leapSeconds_KernelFile);
 	furnsh_c(tdrssSPK_KernelFile);
 
-	printf("Loaded kernels...\n\n");
+	printf("Loaded kernels...\n");
 
-	/* define observer and target */
-	
+	/* convert UTC to ET*/
+	str2et_c(time_UTC, &time_ET);
+	printf("Converted time...\n");
+
+
+	/* get state of satellite */
+	printf("Getting state...\n\n");
+	spkezr_c(target, time_ET, "J2000", "NONE", observer, stateData, &lightTime);
+
+	/* print state of satellite! */
+	printf("PROBLEM A: STATE (Earth Centered):\n");
+	printf("Position [X]: %e\nPosition [Y]: %e\nPosition [Z]: %e\n\n", stateData[0], stateData[1], stateData[2]);
+	printf("Velocity [X]: %e\nVelocity [Y]: %e\nVelocity [Z]: %e\n\n", stateData[3], stateData[4], stateData[5]);
+
+
 	return 0;
 }
