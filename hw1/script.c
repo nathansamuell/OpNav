@@ -34,8 +34,8 @@ int main() {
 
 	/* print state of satellite! */
 	printf("PROBLEM A: STATE (Earth Centered):\n");
-	printf("Position [X]: %e\nPosition [Y]: %e\nPosition [Z]: %e\n\n", stateData[0], stateData[1], stateData[2]);
-	printf("Velocity [X]: %e\nVelocity [Y]: %e\nVelocity [Z]: %e\n\n", stateData[3], stateData[4], stateData[5]);
+	printf("Position [X]: %23.16e\nPosition [Y]: %23.16e\nPosition [Z]: %23.16e\n\n", stateData[0], stateData[1], stateData[2]);
+	printf("Velocity [X]: %23.16e\nVelocity [Y]: %23.16e\nVelocity [Z]: %23.16e\n\n", stateData[3], stateData[4], stateData[5]);
 
 
 	return 0;
