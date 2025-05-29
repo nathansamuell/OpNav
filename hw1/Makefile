@@ -5,7 +5,7 @@ CSPICE_PATH = $(HOME)/Applications/NASA-SPICE/cspice
 
 CC = gcc
 CFLAGS = -I/$(CSPICE_PATH)/include
-LDFLAGS = $(CSPICE_PATH)/lib/cspice.a
+LDFLAGS = $(CSPICE_PATH)/lib/cspice.a -lm 
 
 TARGET = main
 SRC = script.c
