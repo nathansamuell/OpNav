@@ -14,3 +14,6 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) $(SRC) $(LDFLAGS) -o $(TARGET)
+
+run: $(TARGET)
+	./$(TARGET) | tee output.txt
