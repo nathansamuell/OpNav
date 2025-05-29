@@ -37,6 +37,26 @@ int main() {
 	printf("Position [X]: %23.16e\nPosition [Y]: %23.16e\nPosition [Z]: %23.16e\n\n", stateData[0], stateData[1], stateData[2]);
 	printf("Velocity [X]: %23.16e\nVelocity [Y]: %23.16e\nVelocity [Z]: %23.16e\n\n", stateData[3], stateData[4], stateData[5]);
 
+	/* problem 2, determine orbital elements */
+	/* getting orbital elements from state using oscelt_c() found in the docs */
+	/* local variables for problem 2*/
+
+	// resuse sateliite data from problem 1
+	// resuse ephemeris time from problem 1
+	SpiceDouble mu; // found in Gravity.tpc
+	SpiceInt elementsFound; // not needed, just here to satisfy bodvrd_c
+	SpiceDouble orbitalElements[8];
+	SpiceChar gravityKernel_KernelFile[FILE_SIZE] = "Gravity.tpc";
+	
+	/* load gravity kernel! */
+	furnsh_c(gravityKernel_KernelFile);
+
+	/* retrieve gravity constant mu from Gravity Kernel*/
+	bodvrd_c("EARTH", "GM", 1, &elementsFound, &mu);
+
+	/* get orbital constants! */
+	oscelt_c(stateData, time_ET, mu, orbitalElements);
+	
 
 	return 0;
 }
