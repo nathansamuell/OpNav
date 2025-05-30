@@ -19,3 +19,7 @@ e:  5.9500594762866565e-04
 Big Omega:  8.5632848486146551e-01
 i:  1.5140864648597219e-01
 Little Omega:  5.2597203620758881e+00
+
+PROBLEM B: Orbit Period
+Tau [sec]:  8.6149846733701896e+04
+Note that the orbit period is roughly a day in seconds, TDRSS satellites are geosynchronous!

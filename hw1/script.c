@@ -104,7 +104,16 @@ int main() {
 	printf("Big Omega: %23.16e\n", orbitalConstants[3]);
 	printf("i: %23.16e\n", orbitalConstants[2]);
 	printf("Little Omega: %23.16e\n", orbitalConstants[4]);
-	
+
+	/* calculate orbit period */
+	SpiceDouble tau;
+	tau =(2.0 * 3.14159 * pow(a, 3.0 / 2.0)) / sqrt(mu);
+
+	/* print out our result */
+	printf("\nPROBLEM B: Orbit Period\n");
+	printf("Tau [sec]: %23.16e\n", tau);
+
+	printf("Note that the orbit period is roughly a day in seconds, TDRSS satellites are geosynchronous!\n");
 
 	return 0;
 }
