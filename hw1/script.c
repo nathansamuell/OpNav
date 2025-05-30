@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "SpiceUsr.h"
 
 int main() {
@@ -34,8 +35,8 @@ int main() {
 
 	/* print state of satellite! */
 	printf("PROBLEM A: STATE (Earth Centered):\n");
-	printf("Position [X]: %23.16e\nPosition [Y]: %23.16e\nPosition [Z]: %23.16e\n\n", stateData[0], stateData[1], stateData[2]);
-	printf("Velocity [X]: %23.16e\nVelocity [Y]: %23.16e\nVelocity [Z]: %23.16e\n\n", stateData[3], stateData[4], stateData[5]);
+	printf("Position [X][km]: %23.16e\nPosition [Y][km]: %23.16e\nPosition [Z][km]: %23.16e\n\n", stateData[0], stateData[1], stateData[2]);
+	printf("Velocity [X][km/sec]: %23.16e\nVelocity [Y][km/sec]: %23.16e\nVelocity [Z][km/sec]: %23.16e\n\n", stateData[3], stateData[4], stateData[5]);
 
 	/* problem 2, determine orbital elements */
 	/* getting orbital elements from state using oscelt_c() found in the docs */
@@ -69,8 +70,8 @@ int main() {
 	 * little omega is argument of perigee/periapsis, orbitalConstants[4] in SPICE docs
 	 * from useful equations in orbital mechanics review, a (semi-major axis) = perifocal distance / (1 - e),
 	 *	so computing should be straightforward! (perifocal distance is orbitalConstants[0] in SPICE docs)
-	 * theta can be found from solving kepler's equation!
-	 * */
+	 * theta can be calculated (borrowed a copy of Mueller/White/Bate Fundamentals of Astrodynamics)!
+	 */
 	
 	/* get orbital constants! */
 	oscelt_c(stateData, time_ET, mu, orbitalConstants);
@@ -78,13 +79,26 @@ int main() {
 	/* calculate a */
 	a = orbitalConstants[0] / (1.0 - orbitalConstants[1]);
 
-	/* solve Kepler's equation for theta */
-	// TODO: figure out if this is the correct approach
-	
+	/* calculate position and velocity magnitudes */
+	/* this method is in the above textbook, I'm not familiar with the iterative methods*/
+	SpiceDouble rMag = sqrt(pow(stateData[0], 2) + pow(stateData[1], 2) + pow(stateData[2], 2));
+	SpiceDouble vMag = sqrt(pow(stateData[3], 2) + pow(stateData[4], 2) + pow(stateData[5], 2));
+
+	/* calculate r dot v (scalar product) */
+	SpiceDouble r_dot_v = stateData[0]*stateData[3] + stateData[1]*stateData[4] + stateData[2]*stateData[5];
+
+	/* calculate theta directly */
+	SpiceDouble theta = acos(r_dot_v/(rMag * vMag));
+
+	/* quadrant check! */
+	if (r_dot_v < 0) {
+	    theta = (2.0 * 3.14159) - theta;
+	}
+
 
 	/* print out our results */
 	printf("\nPROBLEM B: ORBITAL ELEMENTS\n");
-	printf("Theta: %23.16e\n", 23.894); // temp variable until I can calculate it
+	printf("Theta: %23.16e\n", theta); // temp variable until I can calculate it
 	printf("a: %23.16e\n", a);
 	printf("e: %23.16e\n", orbitalConstants[1]);
 	printf("Big Omega: %23.16e\n", orbitalConstants[3]);
